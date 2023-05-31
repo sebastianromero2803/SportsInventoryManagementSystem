@@ -1,6 +1,6 @@
 package com.sportsinventory.DAO;
 
-import com.sportsinventory.DTO.UserDTO;
+import com.sportsinventory.DTO.AdminDTO;
 import com.sportsinventory.Database.ConnectionFactory;
 
 import javax.swing.*;
@@ -9,14 +9,14 @@ import java.sql.*;
 import java.util.Locale;
 import java.util.Vector;
 
-public class UserDAO {
+public class AdminDAO {
     Connection conn = null;
     PreparedStatement prepStatement = null;
     Statement statement = null;
     ResultSet resultSet = null;
 
     // Constructor method
-    public UserDAO() {
+    public AdminDAO() {
         try {
             conn = new ConnectionFactory().getConn();
             statement = conn.createStatement();
@@ -25,35 +25,29 @@ public class UserDAO {
         }
     }
 
-    public void addUserDAO(UserDTO userDTO, String userType) {
+    public void addAdminDAO(AdminDTO adminDTO, String adminType) {
         try {
-            String query = "SELECT * FROM users WHERE userName='" + userDTO.getUsername() + "'";
+            String query = "SELECT * FROM admins WHERE username='" + adminDTO.getUsername() + "'";
             resultSet = statement.executeQuery(query);
             if(resultSet.next())
-                JOptionPane.showMessageDialog(null, "User already exists");
+                JOptionPane.showMessageDialog(null, "Admin already exists");
             else
-                addFunction(userDTO, userType);
+                addFunction(adminDTO, adminType);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    public void addFunction(UserDTO userDTO, String userType) {
+    public void addFunction(AdminDTO adminDTO, String adminType) {
         try {
-            String userid = null;
-            String password = null;
-            String oldUsername = null;
-            String resQuery = "SELECT * FROM users";
-            resultSet = statement.executeQuery(resQuery);
-
-            String query = "INSERT INTO users (userID,userName,name,email,password,regDate) " +
+            String query = "INSERT INTO admins (adminID,username,name,email,password,regDate) " +
                     "VALUES(?,?,?,?,?,?)";
             prepStatement = conn.prepareStatement(query);
-            prepStatement.setInt(1, userDTO.getUserID());
-            prepStatement.setString(2, userDTO.getUsername());
-            prepStatement.setString(3, userDTO.getFullName());
-            prepStatement.setString(4, userDTO.getEmail());
-            prepStatement.setString(5, userDTO.getPassword());
-            prepStatement.setString(6, userDTO.getRegDate());
+            prepStatement.setInt(1, adminDTO.getAdminID());
+            prepStatement.setString(2, adminDTO.getUsername());
+            prepStatement.setString(3, adminDTO.getFullName());
+            prepStatement.setString(4, adminDTO.getEmail());
+            prepStatement.setString(5, adminDTO.getPassword());
+            prepStatement.setString(6, adminDTO.getRegDate());
             prepStatement.executeUpdate();
 
         } catch (Exception ex){
@@ -61,14 +55,14 @@ public class UserDAO {
         }
     }
 
-    public void editUserDAO(UserDTO userDTO) {
+    public void editAdminDAO(AdminDTO adminDTO) {
 
         try {
-            String query = "UPDATE users SET name=?, email=?, password=? WHERE userName=?";
+            String query = "UPDATE admins SET name=?, email=?, password=? WHERE username=?";
             prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(1, userDTO.getFullName());
-            prepStatement.setString(2, userDTO.getEmail());
-            prepStatement.setString(3, userDTO.getPassword());
+            prepStatement.setString(1, adminDTO.getFullName());
+            prepStatement.setString(2, adminDTO.getEmail());
+            prepStatement.setString(3, adminDTO.getPassword());
             prepStatement.executeUpdate();
             JOptionPane.showMessageDialog(null, "Updated Successfully.");
 
@@ -77,11 +71,11 @@ public class UserDAO {
         }
     }
 
-    public void deleteUserDAO(String userid) {
+    public void deleteAdminDAO(String adminid) {
         try {
-            String query = "DELETE FROM users WHERE userName=?";
+            String query = "DELETE FROM admins WHERE username=?";
             prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(1, userid);
+            prepStatement.setString(1, adminid);
             prepStatement.executeUpdate();
         } catch (SQLException throwable) {
             throwable.printStackTrace();
@@ -90,7 +84,7 @@ public class UserDAO {
 
     public ResultSet getQueryResult() {
         try {
-            String query = "SELECT * FROM users";
+            String query = "SELECT * FROM admins";
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwable) {
             throwable.printStackTrace();
@@ -98,9 +92,9 @@ public class UserDAO {
         return resultSet;
     }
 
-    public ResultSet getUserDAO(String userName) {
+    public ResultSet getAdminDAO(String username) {
         try {
-            String query = "SELECT * FROM users WHERE userName='" +userName+ "'";
+            String query = "SELECT * FROM admins WHERE username='" +username+ "'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -108,10 +102,10 @@ public class UserDAO {
         return resultSet;
     }
 
-    public ResultSet getPassDAO(String userName, String password){
+    public ResultSet getPassDAO(String username, String password){
         try {
-            String query = "SELECT password FROM users WHERE userName='"
-                    +userName
+            String query = "SELECT password FROM admins WHERE username='"
+                    +username
                     + "' AND password='"
                     +password
                     +"'";
@@ -122,12 +116,12 @@ public class UserDAO {
         return resultSet;
     }
 
-    public void changePass(String userName, String password) {
+    public void changePass(String username, String password) {
         try {
-            String query = "UPDATE users SET password=? WHERE userName='" +userName+ "'";
+            String query = "UPDATE admins SET password=? WHERE username='" +username+ "'";
             prepStatement = conn.prepareStatement(query);
             prepStatement.setString(1, password);
-            prepStatement.setString(2, userName);
+            prepStatement.setString(2, username);
             prepStatement.executeUpdate();
         } catch (SQLException ex){
             ex.printStackTrace();

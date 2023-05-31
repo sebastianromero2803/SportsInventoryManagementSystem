@@ -1,15 +1,15 @@
 package com.sportsinventory.DTO;
 
-public class UserDTO {
-    private int userID;
+public class AdminDTO {
+    private int adminID;
     private String userName, name, email, password, regDate;
 
-    public int getUserID() {
-        return userID;
+    public int getAdminID() {
+        return adminID;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setAdminID(int adminID) {
+        this.adminID = adminID;
     }
 
     public String getUsername() {
